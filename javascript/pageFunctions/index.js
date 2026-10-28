@@ -115,39 +115,120 @@ document
 
     });
 
-
-function getCart() {
-
-    return JSON.parse(
-        localStorage.getItem('cart')
-    ) || [];
-
+// Gera ou resgata o ID único do visitante no navegador
+function getVisitorId() {
+    let visitorId = localStorage.getItem('ffstudio_visitor_id');
+    if (!visitorId) {
+        visitorId = crypto.randomUUID();
+        localStorage.setItem('ffstudio_visitor_id', visitorId);
+    }
+    return visitorId;
 }
 
+// Atualiza a bolinha vermelha do carrinho consultando o Supabase
+async function updateCartCount() {
+    const cartId = await getOrCreateCart();
+    if (!cartId) return;
 
-function saveCart(cart) {
+    const { data, error } = await supabase
+        .from('cart_items')
+        .select('quantity')
+        .eq('cart_id', cartId);
 
-    localStorage.setItem(
-        'cart',
-        JSON.stringify(cart)
-    );
+    if (error) {
+        console.error('Erro ao buscar contagem:', error);
+        return;
+    }
 
+    const totalItems = data.reduce((total, item) => total + item.quantity, 0);
+
+    const cartCount = document.getElementById('cart-count');
+    const cartCountMobile = document.getElementById('cart-count-mobile');
+
+    if (cartCount) cartCount.textContent = totalItems;
+    if (cartCountMobile) cartCountMobile.textContent = totalItems;
 }
 
+async function getOrCreateCart() {
+    const userId = getVisitorId();
 
-function updateCartCount() {
+    const { data: existingCart, error: selectError } =
+        await supabase
+            .from('carts')
+            .select('id')
+            .eq('user_id', userId)
+            .maybeSingle();
 
-    const cart = getCart();
+    if (selectError) {
+        console.error('Erro ao buscar carrinho:', selectError);
+        return null;
+    }
 
-    document.getElementById('cart-count').textContent =
-        cart.reduce(
-            (total, item) =>
-                total + item.quantity,
-            0
-        );
+    if (existingCart) {
+        return existingCart.id;
+    }
 
+    const now = new Date().toISOString();
+
+    const { data: newCart, error: insertError } =
+        await supabase
+            .from('carts')
+            .insert({
+                user_id: userId,
+                created_at: now,
+                updated_at: now
+            })
+            .select('id')
+            .single();
+
+    if (insertError) {
+        console.error('Erro ao criar carrinho:', insertError);
+        return null;
+    }
+
+    return newCart.id;
 }
 
+async function addProductToCart(productId) {
+    const cartId = await getOrCreateCart();
+    if (!cartId) return false;
+
+    const { data: existingItem, error: selectError } =
+        await supabase
+            .from('cart_items')
+            .select('id, quantity')
+            .eq('cart_id', cartId)
+            .eq('product_id', productId)
+            .maybeSingle();
+
+    if (selectError) {
+        console.error('Erro ao verificar produto:', selectError);
+        return false;
+    }
+
+    if (existingItem) {
+        const { error: updateError } =
+            await supabase
+                .from('cart_items')
+                .update({ quantity: existingItem.quantity + 1 })
+                .eq('id', existingItem.id);
+
+        if (updateError) return false;
+        return true;
+    }
+
+    const { error: insertError } =
+        await supabase
+            .from('cart_items')
+            .insert({
+                cart_id: cartId,
+                product_id: productId,
+                quantity: 1
+            });
+
+    if (insertError) return false;
+    return true;
+}
 
 /* =========================================
    PRODUTOS EM DESTAQUE
@@ -285,58 +366,67 @@ async function loadFeaturedProducts() {
    ADICIONAR AO CARRINHO
 ========================================= */
 
-document.addEventListener('click', (e) => {
+// Elementos do Modal
+const cartModal = document.getElementById('cart-modal');
+const closeCartModal = document.getElementById('close-cart-modal');
+const continueShopping = document.getElementById('continue-shopping');
+const modalProductName = document.getElementById('modal-product-name');
 
-    const button =
-        e.target.closest('.add-cart');
+function openCartModal(productName) {
+    if (!cartModal) return;
+    modalProductName.textContent = productName;
+    cartModal.classList.remove('hidden');
+    cartModal.classList.add('flex');
+    document.body.classList.add('overflow-hidden');
+    lucide.createIcons();
+}
 
-    if (!button) return;
+function closeModal() {
+    if (!cartModal) return;
+    cartModal.classList.add('hidden');
+    cartModal.classList.remove('flex');
+    document.body.classList.remove('overflow-hidden');
+}
 
+if (closeCartModal) closeCartModal.addEventListener('click', closeModal);
+if (continueShopping) continueShopping.addEventListener('click', closeModal);
 
-    const id =
-        button.dataset.id;
+if (cartModal) {
+    cartModal.addEventListener('click', (e) => {
+        if (e.target === cartModal) closeModal();
+    });
+}
 
-    const name =
-        button.dataset.name;
-
-    const price =
-        parseFloat(button.dataset.price);
-
-
-    const cart =
-        getCart();
-
-
-    const existingProduct =
-        cart.find(
-            item => item.id === id
-        );
-
-
-    if (existingProduct) {
-
-        existingProduct.quantity += 1;
-
-    } else {
-
-        cart.push({
-
-            id: id,
-            name: name,
-            price: price,
-            quantity: 1
-
-        });
-
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cartModal && !cartModal.classList.contains('hidden')) {
+        closeModal();
     }
-
-
-    saveCart(cart);
-
-    updateCartCount();
-
 });
 
+// Evento de clique no botão "Adicionar" dos produtos em destaque na Home
+document.addEventListener('click', async (e) => {
+    const button = e.target.closest('.add-cart');
+    if (!button) return;
+
+    const id = button.dataset.id;
+    const name = button.dataset.name;
+
+    button.disabled = true;
+    button.textContent = 'Adicionando...';
+
+    const success = await addProductToCart(id);
+
+    button.disabled = false;
+    button.textContent = 'Adicionar';
+
+    if (!success) {
+        alert('Não foi possível adicionar o produto ao carrinho.');
+        return;
+    }
+
+    await updateCartCount();
+    openCartModal(name); // Abre o pop-up idêntico ao do catálogo!
+});
 
 loadFeaturedProducts();
 

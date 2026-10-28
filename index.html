@@ -487,6 +487,53 @@
         </div>
     </footer>
 
+    <!-- POP-UP: Produto adicionado (Home) -->
+    <div id="cart-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+    
+        <div id="cart-modal-content"
+            class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center relative transform transition-all">
+    
+            <!-- Botão fechar -->
+            <button id="close-cart-modal"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+        
+            <!-- Ícone -->
+            <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-orange-50 flex items-center justify-center">
+                <i data-lucide="shopping-bag" class="w-8 h-8 text-coral"></i>
+            </div>
+        
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">
+                Produto adicionado!
+            </h2>
+        
+            <p class="text-gray-600 mb-2">
+                <span id="modal-product-name" class="font-semibold text-gray-800"></span>
+                foi adicionado ao seu carrinho.
+            </p>
+        
+            <p class="text-gray-500 text-sm mb-7">
+                Deseja continuar comprando ou ir para o carrinho?
+            </p>
+        
+            <!-- Botões -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="continue-shopping"
+                    class="flex-1 border border-coral text-coral px-5 py-3 rounded-full font-medium hover:bg-orange-50 transition-colors">
+                    Continuar comprando
+                </button>
+            
+                <a href="carrinho.html"
+                    class="flex-1 bg-coral text-white px-5 py-3 rounded-full font-medium hover:opacity-90 transition btn-hover flex items-center justify-center">
+                    Ir para o carrinho
+                </a>
+            </div>
+        
+        </div>
+    </div>
+
     <script type="module" src="/javascript/pageFunctions/index.js"></script>
 
 </body>
