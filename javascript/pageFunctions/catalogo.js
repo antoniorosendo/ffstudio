@@ -357,3 +357,55 @@ async function addProductToCart(productId) {
 
 loadProducts();
 updateCartCount();
+
+// Verifica o status de autenticação e renderiza o menu administrativo no Footer
+async function renderAdminMenu() {
+    const adminSection = document.getElementById('admin-section');
+    if (!adminSection) return;
+
+    // Busca a sessão atual no Supabase
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (session) {
+        // Se estiver logado, mostra os links de gerenciamento e o botão de sair
+        adminSection.innerHTML = `
+            <h4 class="font-bold mb-3 text-gray-800">Painel de Controle</h4>
+            <ul class="space-y-3 text-gray-500 text-sm">
+                <li>
+                    <a href="cadastroProd.html" class="hover:text-coral transition-colors flex items-center gap-2">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i> Cadastrar Produto
+                    </a>
+                </li>
+                <li>
+                    <a href="gerenciaProd.html" class="hover:text-coral transition-colors flex items-center gap-2">
+                        <i data-lucide="layout-list" class="w-4 h-4"></i> Gerenciar Produtos
+                    </a>
+                </li>
+                <li class="pt-2">
+                    <button onclick="logoutAdmin()" class="text-red-400 hover:text-red-600 transition-colors flex items-center gap-2 w-full text-left font-medium">
+                        <i data-lucide="log-out" class="w-4 h-4"></i> Sair do Painel
+                    </button>
+                </li>
+            </ul>
+        `;
+    } else {
+        // Se não estiver logado, mostra apenas o link discreto de login
+        adminSection.innerHTML = `
+            <a href="login.html" class="text-sm font-medium text-gray-400 hover:text-coral transition-colors flex items-center gap-2">
+                <i data-lucide="lock" class="w-4 h-4"></i> Acesso Administrativo
+            </a>
+        `;
+    }
+    
+    // Recria os ícones inseridos pelo innerHTML
+    lucide.createIcons();
+}
+
+// Função global atrelada ao botão de Sair
+window.logoutAdmin = async function() {
+    await supabase.auth.signOut();
+    window.location.reload(); // Recarrega a página para atualizar o rodapé
+};
+
+// Executa a função ao carregar a página
+renderAdminMenu();
