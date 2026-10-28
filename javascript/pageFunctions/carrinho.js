@@ -218,9 +218,18 @@ function updateWhatsappButton(cart) {
     whatsappButton.href = whatsappUrl;
 }
 
-async function getUserCart() {
+function getVisitorId() {
+    let visitorId = localStorage.getItem('ffstudio_visitor_id');
+    if (!visitorId) {
+        // Generates a standard UUID and saves it to local storage
+        visitorId = crypto.randomUUID();
+        localStorage.setItem('ffstudio_visitor_id', visitorId);
+    }
+    return visitorId;
+}
 
-    const userId = 'f85672ef-f499-4a39-9c24-63d0c0756dd2';
+async function getUserCart() {
+    const userId = getVisitorId();
 
     const { data, error } = await supabase
         .from('carts')

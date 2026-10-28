@@ -31,25 +31,29 @@ function saveCart(cart) {
 }
 
 
-function updateCartCount() {
+// Busca a quantidade total diretamente da tabela cart_items no Supabase
+async function updateCartCount() {
+    const cartId = await getOrCreateCart();
+    if (!cartId) return;
 
-    const cart = getCart();
+    const { data, error } = await supabase
+        .from('cart_items')
+        .select('quantity')
+        .eq('cart_id', cartId);
 
-    const totalItems = cart.reduce(
-        (total, item) => total + item.quantity,
-        0
-    );
+    if (error) {
+        console.error('Erro ao buscar contagem:', error);
+        return;
+    }
+
+    // Soma a quantidade de todos os itens retornados pelo banco
+    const totalItems = data.reduce((total, item) => total + item.quantity, 0);
 
     const cartCount = document.getElementById('cart-count');
     const cartCountMobile = document.getElementById('cart-count-mobile');
 
-    if (cartCount) {
-        cartCount.textContent = totalItems;
-    }
-
-    if (cartCountMobile) {
-        cartCountMobile.textContent = totalItems;
-    }
+    if (cartCount) cartCount.textContent = totalItems;
+    if (cartCountMobile) cartCountMobile.textContent = totalItems;
 }
 
 const cartModal = document.getElementById('cart-modal');
@@ -114,35 +118,13 @@ document.addEventListener('click', async (e) => {
     button.textContent = 'Adicionar';
 
     if (!success) {
-
         alert('Não foi possível adicionar o produto ao carrinho.');
-
         return;
     }
 
-    const cart = getCart();
-
-    const existingProduct = cart.find(
-        item => item.id === id
-    );
-
-    if (existingProduct) {
-
-        existingProduct.quantity += 1;
-
-    } else {
-
-        cart.push({
-            id: id,
-            name: name,
-            price: price,
-            quantity: 1
-        });
-
-    }
-
-    saveCart(cart);
-    updateCartCount();
+    // Como o addProductToCart já salvou no Supabase, 
+    // basta mandar atualizar a bolinha vermelha e abrir o modal!
+    await updateCartCount();
     openCartModal(name);
 });
 
@@ -217,9 +199,19 @@ function getCartId() {
     return localStorage.getItem('cart_id');
 }
 
-async function getOrCreateCart() {
+// Function to generate and store a unique visitor ID
+function getVisitorId() {
+    let visitorId = localStorage.getItem('ffstudio_visitor_id');
+    if (!visitorId) {
+        // Generates a standard UUID and saves it to local storage
+        visitorId = crypto.randomUUID();
+        localStorage.setItem('ffstudio_visitor_id', visitorId);
+    }
+    return visitorId;
+}
 
-    const userId = 'f85672ef-f499-4a39-9c24-63d0c0756dd2';
+async function getOrCreateCart() {
+    const userId = getVisitorId();
 
     const { data: existingCart, error: selectError } =
         await supabase
