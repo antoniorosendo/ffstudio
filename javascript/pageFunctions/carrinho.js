@@ -1,4 +1,6 @@
 import { supabase } from '../database/supaBase.js';
+import { getVisitorId } from '../database/visitor.js';
+const userId = getVisitorId();
 
 lucide.createIcons();
 
@@ -137,6 +139,12 @@ async function increaseQuantity(cartItemId) {
 
     if (!item) return;
 
+    const product = item.products;
+    if (product.availability === 'in_stock' && item.quantity + 1 > product.stock_quantity) {
+        alert(`Só temos ${product.stock_quantity} unidade(s) em pronta entrega.`);
+        return;
+    }
+
     const success = await updateCartItemQuantity(
         cartItemId,
         item.quantity + 1
@@ -263,7 +271,9 @@ async function getCartItems(cartId) {
                 name,
                 description,
                 base_price,
-                image_url
+                image_url,
+                availability, 
+                stock_quantity
             )
         `)
         .eq('cart_id', cartId);

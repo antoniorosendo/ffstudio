@@ -5,6 +5,20 @@ lucide.createIcons();
 const productForm = document.getElementById('product-form');
 const submitButton = productForm.querySelector('button[type="submit"]');
 
+// Campos de disponibilidade e estoque
+const availabilitySelect = document.getElementById('availability');
+const stockInput = document.getElementById('stock_quantity');
+const stockField = document.getElementById('stock-field') || stockInput.parentElement;
+
+// Mostra o campo de estoque só para "pronta entrega"
+function toggleAvailabilityFields() {
+    const inStock = availabilitySelect.value === 'in_stock';
+    stockField.classList.toggle('hidden', !inStock);
+}
+
+availabilitySelect.addEventListener('change', toggleAvailabilityFields);
+toggleAvailabilityFields();
+
 productForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -16,12 +30,22 @@ productForm.addEventListener('submit', async (e) => {
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
     const base_price = parseFloat(document.getElementById('base_price').value);
-    const stock_quantity = parseInt(document.getElementById('stock_quantity').value, 10);
-    
+
+    // Sob encomenda -> estoque 0. Pronta entrega -> quantidade informada (mínimo 1)
+    const availability = availabilitySelect.value;
+    const stock_quantity = availability === 'in_stock'
+        ? Math.max(1, parseInt(stockInput.value, 10) || 1)
+        : 0;
+
     const fileInput = document.getElementById('image_file');
     const file = fileInput.files[0];
 
     try {
+        if (!file) {
+            alert('Selecione uma imagem para o produto.');
+            return;
+        }
+
         // 1. Upload da imagem para o Storage
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
@@ -40,13 +64,14 @@ productForm.addEventListener('submit', async (e) => {
 
         const imageUrl = publicUrlData.publicUrl;
 
-        // 3. Salvar o produto no banco com o estoque
+        // 3. Salvar o produto no banco
         const { error: insertError } = await supabase
             .from('products')
             .insert([{
                 name: name,
                 description: description,
                 base_price: base_price,
+                availability: availability,
                 stock_quantity: stock_quantity,
                 image_url: imageUrl,
                 is_active: true
@@ -56,6 +81,7 @@ productForm.addEventListener('submit', async (e) => {
 
         alert("Produto e imagem cadastrados com sucesso!");
         productForm.reset();
+        toggleAvailabilityFields(); // o reset volta o select para "sob encomenda"
 
     } catch (error) {
         console.error("Erro durante o processo:", error);

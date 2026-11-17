@@ -1,4 +1,6 @@
 import { supabase } from '../database/supaBase.js';
+import { getVisitorId } from '../database/visitor.js';
+const userId = getVisitorId();
 
 lucide.createIcons();
 
@@ -154,6 +156,11 @@ async function loadProducts() {
 
     products.forEach(product => {
 
+        const isInStock = product.availability === 'in_stock' && product.stock_quantity > 0;
+        const badge = isInStock
+            ? `<span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-700 mb-3">Pronta entrega</span>`
+            : `<span class="inline-block text-xs font-semibold px-3 py-1 rounded-full bg-orange-100 text-orange-700 mb-3">Sob encomenda</span>`;
+
         const productCard = document.createElement('div');
 
         productCard.className =
@@ -165,6 +172,8 @@ async function loadProducts() {
                 alt="${product.name}"
                 class="w-full h-72 object-cover rounded-2xl mb-4">
 
+            ${badge}
+
             <h3 class="text-2xl font-bold text-gray-800 mb-2">
                 ${product.name}
             </h3>
@@ -174,7 +183,6 @@ async function loadProducts() {
             </p>
 
             <div class="flex justify-between items-center">
-
                 <span class="text-2xl font-bold text-coral">
                     R$ ${Number(product.base_price).toFixed(2).replace('.', ',')}
                 </span>
@@ -185,7 +193,6 @@ async function loadProducts() {
                     data-price="${product.base_price}">
                     Adicionar
                 </button>
-
             </div>
         `;
 
@@ -313,6 +320,19 @@ async function addProductToCart(productId) {
             'Quantidade atualizada:',
             data
         );
+
+        const result = await addProductToCart(id);
+
+        button.disabled = false;
+        button.textContent = 'Adicionar';
+
+        if (!result.success) {
+            alert(result.message || 'Não foi possível adicionar o produto ao carrinho.');
+            return;
+        }
+
+        await updateCartCount();
+        openCartModal(name);
 
         return true;
     }
