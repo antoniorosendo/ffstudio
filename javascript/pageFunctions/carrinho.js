@@ -226,16 +226,6 @@ function updateWhatsappButton(cart) {
     whatsappButton.href = whatsappUrl;
 }
 
-function getVisitorId() {
-    let visitorId = localStorage.getItem('ffstudio_visitor_id');
-    if (!visitorId) {
-        // Generates a standard UUID and saves it to local storage
-        visitorId = crypto.randomUUID();
-        localStorage.setItem('ffstudio_visitor_id', visitorId);
-    }
-    return visitorId;
-}
-
 async function getUserCart() {
     const userId = getVisitorId();
 
