@@ -14,15 +14,11 @@ const cartTotal =
     document.getElementById('cart-total');
 
 function renderCart(cart) {
-
     cartItemsContainer.innerHTML = '';
 
     if (cart.length === 0) {
-
         emptyCart.classList.remove('hidden');
-
         updateWhatsappButton([]);
-
         return;
     }
 
@@ -31,51 +27,51 @@ function renderCart(cart) {
     let total = 0;
 
     cart.forEach(item => {
-
         const subtotal = item.price * item.quantity;
-
         total += subtotal;
 
         const product = document.createElement('div');
-
         product.className =
-            'bg-white rounded-3xl shadow-lg p-6 flex justify-between items-center';
+            'bg-white rounded-3xl shadow-lg p-6 flex flex-col sm:flex-row justify-between sm:items-center gap-4';
+
+        const imageSrc = item.image_url || '/images/Logo_FFStudio_2.png';
 
         product.innerHTML = `
-        
-            <div>
-                <h3 class="text-2xl font-bold text-gray-800">
-                    ${item.name}
-                </h3>
+            <div class="flex items-center gap-4 sm:gap-5">
+                <img
+                    src="${imageSrc}"
+                    alt="${item.name}"
+                    class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl object-cover shadow-sm shrink-0">
 
-                <div class="flex items-center gap-3 mt-3">
+                <div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800">
+                        ${item.name}
+                    </h3>
 
-                    <button onclick="decreaseQuantity('${item.cartItemId}')"
-                        class="w-8 h-8 rounded-full bg-orange-100 text-coral font-bold hover:bg-orange-200 transition">
+                    <div class="flex items-center gap-3 mt-3">
+                        <button onclick="decreaseQuantity('${item.cartItemId}')"
+                            class="w-8 h-8 rounded-full bg-orange-100 text-coral font-bold hover:bg-orange-200 transition">
+                            -
+                        </button>
 
-                        -
-                    </button>
+                        <span class="text-gray-700 font-semibold">
+                            ${item.quantity}
+                        </span>
 
-                    <span class="text-gray-700 font-semibold">
-                        ${item.quantity}
-                    </span>
+                        <button onclick="increaseQuantity('${item.cartItemId}')"
+                            class="w-8 h-8 rounded-full bg-orange-100 text-coral font-bold hover:bg-orange-200 transition">
+                            +
+                        </button>
+                    </div>
 
-                    <button onclick="increaseQuantity('${item.cartItemId}')"
-                        class="w-8 h-8 rounded-full bg-orange-100 text-coral font-bold hover:bg-orange-200 transition">
-
-                        +
-                    </button>
-
+                    <p class="text-coral font-bold text-xl mt-2">
+                        R$ ${subtotal.toFixed(2).replace('.', ',')}
+                    </p>
                 </div>
-
-                <p class="text-coral font-bold text-xl mt-2">
-                    R$ ${subtotal.toFixed(2).replace('.', ',')}
-                </p>
             </div>
 
             <button onclick="removeItem('${item.cartItemId}')"
-                class="bg-red-100 text-red-500 px-4 py-2 rounded-full hover:bg-red-200 transition">
-
+                class="bg-red-100 text-red-500 px-4 py-2 rounded-full hover:bg-red-200 transition self-end sm:self-center shrink-0">
                 Remover
             </button>
         `;

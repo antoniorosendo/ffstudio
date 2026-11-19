@@ -39,7 +39,7 @@
                 <p class="text-coral font-medium tracking-widest uppercase mb-2 text-sm">Painel Administrativo</p>
                 <h1 class="text-4xl font-bold text-gray-800">Gerenciar produtos</h1>
             </div>
-            
+
             <a href="cadastroProd.html" class="bg-green text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition btn-hover flex items-center gap-2 shadow-md">
                 <i data-lucide="plus" class="w-5 h-5"></i>
                 Novo produto
@@ -48,7 +48,7 @@
 
         <!-- Container da Tabela -->
         <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
-            
+
             <!-- Barra de Busca e Filtros -->
             <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row gap-4 justify-between items-center bg-gray-50/50">
                 <div class="relative w-full max-w-md">
@@ -65,14 +65,15 @@
                     <thead>
                         <tr class="bg-white border-b border-gray-100 text-sm tracking-wide text-gray-500 uppercase">
                             <th class="px-6 py-4 font-semibold">Produto</th>
+                            <th class="px-6 py-4 font-semibold">Categoria</th>
                             <th class="px-6 py-4 font-semibold">Preço</th>
                             <th class="px-6 py-4 font-semibold text-center">Estoque</th>
-                            <th class="px-6 py-4 font-semibold text-center">Status</th>
+                            <th class="px-6 py-4 font-semibold text-center">Disponibilidade</th>
                             <th class="px-6 py-4 font-semibold text-right">Ações</th>
                         </tr>
                     </thead>
                     <tbody id="tabela-produtos" class="divide-y divide-gray-100">
-                        
+
                     </tbody>
                 </table>
             </div>

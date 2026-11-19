@@ -16,6 +16,34 @@ function toggleAvailabilityFields() {
     stockField.classList.toggle('hidden', !inStock);
 }
 
+const categorySelect = document.getElementById('category_id');
+
+async function loadCategories() {
+    if (!categorySelect) return;
+
+    const { data: categories, error } = await supabase
+        .from('categories')
+        .select('id, name')
+        .order('name', { ascending: true });
+
+    if (error) {
+        console.error('Erro ao carregar categorias:', error);
+        categorySelect.innerHTML = '<option value="">Erro ao carregar categorias</option>';
+        return;
+    }
+
+    categorySelect.innerHTML = '<option value="">Selecione uma categoria</option>';
+
+    categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.name;
+        categorySelect.appendChild(option);
+    });
+}
+
+loadCategories();
+
 availabilitySelect.addEventListener('change', toggleAvailabilityFields);
 toggleAvailabilityFields();
 
@@ -30,6 +58,7 @@ productForm.addEventListener('submit', async (e) => {
     const name = document.getElementById('name').value;
     const description = document.getElementById('description').value;
     const base_price = parseFloat(document.getElementById('base_price').value);
+    const category_id = categorySelect.value || null;
 
     // Sob encomenda -> estoque 0. Pronta entrega -> quantidade informada (mínimo 1)
     const availability = availabilitySelect.value;
@@ -72,6 +101,7 @@ productForm.addEventListener('submit', async (e) => {
                 description: description,
                 base_price: base_price,
                 availability: availability,
+                category_id: category_id,
                 stock_quantity: stock_quantity,
                 image_url: imageUrl,
                 is_active: true
