@@ -196,30 +196,37 @@ async function removeItem(cartItemId) {
 }
 
 function updateWhatsappButton(cart) {
-
     // const phone = "5511939288314";
     const phone = "5514988082038";
 
-    let message = "Olá! Tenho interesse nos seguintes produtos: %0A%0A";
-
     let total = 0;
+    let itemsText = "";
 
     cart.forEach(item => {
-
         const subtotal = item.price * item.quantity;
-
         total += subtotal;
 
-        message +=
-            `• ${item.name} - ${item.quantity}x - R$ ${subtotal.toFixed(2)}%0A`;
+        const priceFormatted = subtotal.toFixed(2).replace('.', ',');
+        itemsText += `- ${item.name} - ${item.quantity}un. (R$ ${priceFormatted})\n`;
     });
 
-    message += `%0ATotal: R$ ${total.toFixed(2)}`;
+    const totalFormatted = total.toFixed(2).replace('.', ',');
 
-    const whatsappUrl = `https://wa.me/${phone}?text=${message}`;
+    const part1 = encodeURIComponent("Oi, *FF Studio*! Tudo bem? ");
+    const part2 = encodeURIComponent("\n\nMontei meu carrinho no site e tenho interesse neste(s) item(ns):\n" + itemsText + "\n");
+    const part3 = encodeURIComponent(` *Valor Total:* R$ ${totalFormatted}\nGostaria de mais informações sobre o pagamento, entrega e personalização! `);
+
+    const encodedMessage =
+        part1 + "%F0%9F%A7%B6" +
+        part2 +
+        "%E2%9C%A8" + part3 + "%F0%9F%A7%A1";
+
+    const whatsappUrl = `https://api.whatsapp.com/send?phone=${phone}&text=${encodedMessage}`;
 
     const whatsappButton = document.getElementById('whatsapp-btn');
-    whatsappButton.href = whatsappUrl;
+    if (whatsappButton) {
+        whatsappButton.href = whatsappUrl;
+    }
 }
 
 async function getUserCart() {
