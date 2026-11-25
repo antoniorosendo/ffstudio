@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /login.html
+Disallow: /gerenciaProd.html
+Disallow: /gerenciaPedidos.html
+Disallow: /cadastroProd.html
+Disallow: /editarProd.html
+Disallow: /editarPedido.html
+
+Sitemap: https://ffstudio-br.vercel.app/sitemap.xml
