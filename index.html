@@ -4,11 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FF Studio</title>
-    <meta name="description" content="Peças exclusivas feitas à mão em crochê por Fernanda Freitas. Bolsas, acessórios e decoração artesanal sob encomenda e pronta entrega com envio para todo o Brasil.">
+    <title>FF Studio | Bolsas e Peças de Crochê Artesanal por Fernanda Freitas</title>
+    <meta name="description" content="Ateliê de crochê artesanal por Fernanda Freitas. Bolsas de crochê, mesa posta, cestos e peças exclusivas feitas à mão sob encomenda e pronta entrega em Salto - SP com envio para todo o Brasil.">
     <link rel="canonical" href="https://ffstudio-br.vercel.app/">
-    <meta name="google-site-verification" content="Z7CKNocZ85gaMUJEfDkhX3hC8VtbEM72yxTwF_tYRS4" />
 
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Store",
+      "name": "FF Studio - Fernanda Freitas",
+      "description": "Ateliê especializado em bolsas de crochê, decoração, mesa posta e peças artesanais feitas à mão sob encomenda e pronta entrega.",
+      "url": "https://ffstudio-br.vercel.app/",
+      "logo": "https://ffstudio-br.vercel.app/images/Logo_FFStudio.png",
+      "telephone": "+55-11-93928-8314",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Salto",
+        "addressRegion": "SP",
+        "addressCountry": "BR"
+      },
+      "sameAs": [
+        "https://www.instagram.com/fernandafreitasstudio"
+      ]
+    }
+    </script>
+    
     <meta property="og:title" content="FF Studio | Peças de Crochê Artesanal">
     <meta property="og:description" content="Transformando fios em arte. Peças exclusivas feitas à mão com amor e dedicação.">
     <meta property="og:image" content="https://ffstudio-br.vercel.app/images/Logo_FFStudio.png">
@@ -48,8 +68,9 @@
                         class="text-gray-700 hover:text-coral transition-colors duration-300 text-sm uppercase tracking-wider nav-link">Contato</a>
                     <a href="catalogo.html"
                         class="bg-coral text-white px-6 py-2 rounded-full text-sm uppercase tracking-wider btn-hover">Catálogo</a>
-                    <a href="carrinho.html"
-                        class="relative text-gray-700 hover:text-coral transition-colors duration-300">
+                    <a id="header-cart-link" href="carrinho.html"
+                        class="relative text-gray-700 hover:text-coral transition-colors duration-300"
+                        title="Carrinho">
                         <i data-lucide="shopping-bag" class="w-6 h-6"></i>
 
                         <span id="cart-count"
@@ -81,7 +102,7 @@
                 <a href="#contato"
                     class="block px-3 py-2 text-gray-700 hover:text-coral hover:bg-orange-50 rounded-md">Contato</a>
                 <a href="catalogo.html" class="block px-3 py-2 text-coral font-semibold">Catálogo</a>
-                <a href="carrinho.html"
+                <a id="mobile-cart-link" href="carrinho.html"
                     class="block px-3 py-2 text-gray-700 hover:text-coral hover:bg-orange-50 rounded-md">Carrinho</a>
             </div>
         </div>
@@ -162,9 +183,9 @@
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="relative">
                     <div class="grid grid-cols-2 gap-4">
-                        <img src="/images/Crochê/B1.jpg" alt="Bolsa de exibição 1"
+                        <img src="/images/Crochê/B1.jpg" alt="Bolsa de crochê artesanal feita à mão — FF Studio"
                             class="rounded-2xl shadow-lg w-full h-64 object-cover">
-                        <img src="/images/Crochê/B2.jpg" alt="Bolsa de exibição 2"
+                        <img src="/images/Crochê/B2.jpg" alt="Bolsa tiracolo de crochê personalizada Fernanda Freitas"
                             class="rounded-2xl shadow-lg w-full h-64 object-cover mt-8">
                     </div>
                     <div
@@ -300,27 +321,27 @@
 
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 <div class="aspect-square rounded-xl overflow-hidden group cursor-pointer">
-                    <img src="/images/Crochê/B7.jpg" alt="Instagram"
+                    <img src="/images/Crochê/B7.jpg" alt="Instagram Fernanda Freitas Studio"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="aspect-square rounded-xl overflow-hidden group cursor-pointer">
-                    <img src="/images/Crochê/Mesa_Posta.jpg" alt="Instagram"
+                    <img src="/images/Crochê/Mesa_Posta.jpg" alt="Jogo americano e mesa posta em crochê artesanal"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="aspect-square rounded-xl overflow-hidden group cursor-pointer">
-                    <img src="/images/Crochê/B9.jpg" alt="Instagram"
+                    <img src="/images/Crochê/B9.jpg" alt="Bolsa de crochê artesanal feita à mão — FF Studio"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="aspect-square rounded-xl overflow-hidden group cursor-pointer">
-                    <img src="/images/Crochê/B4.jpg" alt="Instagram"
+                    <img src="/images/Crochê/B4.jpg" alt="Bolsa de crochê artesanal feita à mão — FF Studio"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="aspect-square rounded-xl overflow-hidden group cursor-pointer hidden md:block">
-                    <img src="/images/Crochê/B5.jpg" alt="Instagram"
+                    <img src="/images/Crochê/B5.jpg" alt="Bolsa de crochê artesanal feita à mão — FF Studio"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
                 <div class="aspect-square rounded-xl overflow-hidden group cursor-pointer hidden md:block">
-                    <img src="/images/Crochê/B10.jpg" alt="Instagram"
+                    <img src="/images/Crochê/B10.jpg" alt="Bolsa de crochê artesanal feita à mão — FF Studio"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                 </div>
             </div>

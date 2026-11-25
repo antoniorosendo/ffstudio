@@ -1,10 +1,41 @@
 import { supabase } from '../database/supaBase.js';
 
+function updateHeaderAuthState(session) {
+    const desktopLink = document.getElementById('header-cart-link');
+    const mobileLink = document.getElementById('mobile-cart-link');
+
+    if (session) {
+        if (desktopLink) {
+            desktopLink.outerHTML = `
+                <button id="header-cart-link" type="button" onclick="logoutAdmin()"
+                    title="Sair do Painel"
+                    class="flex items-center gap-1.5 text-red-500 hover:text-red-700 font-medium text-sm transition-colors duration-300">
+                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                    <span>Sair</span>
+                </button>
+            `;
+        }
+
+        if (mobileLink) {
+            mobileLink.outerHTML = `
+                <button id="mobile-cart-link" type="button" onclick="logoutAdmin()"
+                    class="w-full text-left px-3 py-2 text-red-500 hover:bg-red-50 font-medium rounded-md flex items-center gap-2">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                    <span>Sair do Painel</span>
+                </button>
+            `;
+        }
+    }
+}
+
 async function renderAdminMenu() {
     const adminSection = document.getElementById('admin-section');
-    if (!adminSection) return;
-
     const { data: { session } } = await supabase.auth.getSession();
+
+    // Atualiza o botão do header (Carrinho <-> Sair)
+    updateHeaderAuthState(session);
+
+    if (!adminSection) return;
 
     if (session) {
         adminSection.innerHTML = `
@@ -47,7 +78,7 @@ async function renderAdminMenu() {
 
 window.logoutAdmin = async function () {
     await supabase.auth.signOut();
-    window.location.reload();
+    window.location.href = 'index.html';
 };
 
 export function renderFooter({ isAdmin = false } = {}) {
