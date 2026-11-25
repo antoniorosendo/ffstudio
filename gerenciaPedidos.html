@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Pedidos | FF Studio</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="icon" type="image/png" href="/images/Logo_FFStudio_2.png">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles/style.css">
+    <script type="module" src="/javascript/pageFunctions/authGuard.js"></script>
+</head>
+
+<body class="bg-[#FDF8F3] min-h-screen text-gray-800">
+
+    <!-- Navegação -->
+    <nav class="bg-white shadow-sm border-b border-orange-100">
+        <div class="max-w-7xl mx-auto px-4 py-5 flex justify-between items-center">
+            <a href="index.html" class="flex items-center">
+                <img src="/images/Logo_FFStudio.png" alt="Logo FF Studio" class="h-10 w-auto">
+            </a>
+            <div class="flex items-center gap-3">
+                <a href="gerenciaProd.html" class="border border-gray-200 text-gray-700 px-5 py-2 rounded-full hover:border-coral hover:text-coral transition text-sm font-medium">
+                    Produtos
+                </a>
+                <button type="button" onclick="history.back()" class="border border-coral text-coral px-5 py-2 rounded-full hover:bg-coral hover:text-white transition flex items-center gap-2 text-sm font-medium">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    Voltar
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Conteúdo Principal -->
+    <main class="max-w-7xl mx-auto px-4 py-16">
+
+        <!-- Cabeçalho -->
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
+            <div>
+                <p class="text-coral font-medium tracking-widest uppercase mb-2 text-sm">Painel Administrativo</p>
+                <h1 class="text-4xl font-bold text-gray-800">Gerenciar pedidos</h1>
+            </div>
+
+            <!-- Filtros por Status -->
+            <div id="status-filters" class="flex flex-wrap gap-2">
+                <button type="button" data-status="all" class="status-btn bg-coral text-white px-4 py-2 rounded-full text-sm font-medium transition">
+                    Todos
+                </button>
+                <button type="button" data-status="pending" class="status-btn bg-white text-gray-700 border border-orange-200 px-4 py-2 rounded-full text-sm font-medium hover:border-coral hover:text-coral transition">
+                    Pendentes
+                </button>
+                <button type="button" data-status="confirmed" class="status-btn bg-white text-gray-700 border border-orange-200 px-4 py-2 rounded-full text-sm font-medium hover:border-coral hover:text-coral transition">
+                    Confirmados
+                </button>
+                <button type="button" data-status="cancelled" class="status-btn bg-white text-gray-700 border border-orange-200 px-4 py-2 rounded-full text-sm font-medium hover:border-coral hover:text-coral transition">
+                    Cancelados
+                </button>
+            </div>
+        </div>
+
+        <!-- Container da Tabela -->
+        <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+
+            <!-- Barra de Busca -->
+            <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row gap-4 justify-between items-center bg-gray-50/50">
+                <div class="relative w-full max-w-md">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-5 h-5 text-gray-400"></i>
+                    </div>
+                    <input type="text" id="busca-pedido"
+                        class="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coral focus:border-transparent transition-all bg-white"
+                        placeholder="Buscar por cliente, telefone ou peça...">
+                </div>
+            </div>
+
+            <!-- Tabela Responsiva -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-white border-b border-gray-100 text-sm tracking-wide text-gray-500 uppercase">
+                            <th class="px-6 py-4 font-semibold">Pedido / Data</th>
+                            <th class="px-6 py-4 font-semibold">Cliente</th>
+                            <th class="px-6 py-4 font-semibold">Itens</th>
+                            <th class="px-6 py-4 font-semibold">Total</th>
+                            <th class="px-6 py-4 font-semibold text-center">Status</th>
+                            <th class="px-6 py-4 font-semibold text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabela-pedidos" class="divide-y divide-gray-100">
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Rodapé -->
+            <div class="p-6 border-t border-gray-100 flex justify-between items-center text-sm text-gray-500">
+                <p id="contador-pedidos">Carregando...</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+
+    <div id="footer-container"></div>
+
+    <script type="module" src="/javascript/pageFunctions/gerenciaPedidos.js"></script>
+</body>
+
+</html>

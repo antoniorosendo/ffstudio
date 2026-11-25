@@ -1,4 +1,7 @@
 import { supabase } from '../database/supaBase.js';
+import { renderFooter } from '../components/footer.js';
+
+renderFooter({ isAdmin: true });
 
 // Inicializa os ícones
 lucide.createIcons();

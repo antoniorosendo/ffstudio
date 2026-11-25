@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Lato:wght@300;400;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap"
         rel="stylesheet">
 
     <link rel="stylesheet" href="/styles/style.css">
@@ -98,6 +98,51 @@
         </div>
 
     </main>
+
+    <!-- POP-UP: Prévia do pedido enviada para o WhatsApp -->
+    <div id="order-modal"
+        class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/40 backdrop-blur-sm px-4">
+
+        <div id="order-modal-content"
+            class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 text-center relative transform transition-all">
+
+            <button type="button" id="close-order-modal"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div id="order-modal-icon-box"
+                class="w-16 h-16 mx-auto mb-5 rounded-full bg-green-50 flex items-center justify-center">
+                <span id="order-modal-icon-slot" class="flex items-center justify-center">
+                    <i data-lucide="check-circle-2" class="w-8 h-8 text-green"></i>
+                </span>
+            </div>
+
+            <h2 id="order-modal-title" class="text-2xl font-bold text-gray-800 mb-2">
+                Pedido enviado para o WhatsApp!
+            </h2>
+
+            <p id="order-modal-message" class="text-gray-600 mb-7 leading-relaxed">
+                A prévia do seu pedido foi salva como pendente e o WhatsApp foi aberto em uma nova aba. Agora basta confirmar os detalhes por lá!
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a id="order-modal-whatsapp-link" href="#" target="_blank" rel="noopener noreferrer"
+                    class="flex-1 bg-green text-white px-5 py-3 rounded-full font-medium hover:opacity-90 transition btn-hover flex items-center justify-center gap-2">
+                    <i data-lucide="message-circle" class="w-4 h-4"></i>
+                    Abrir WhatsApp
+                </a>
+
+                <button type="button" id="close-order-modal-btn"
+                    class="flex-1 border border-coral text-coral px-5 py-3 rounded-full font-medium hover:bg-orange-50 transition-colors">
+                    Entendi
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="footer-container"></div>
 
     <script type="module" src="/javascript/pageFunctions/carrinho.js"></script>
 
