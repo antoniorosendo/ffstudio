@@ -285,17 +285,17 @@ if (whatsappButton) {
                 renderCart([]);
 
                 openOrderModal({
-                    title: 'Pedido enviado para o WhatsApp!',
-                    message: 'A prévia do seu pedido foi salva como pendente e o WhatsApp foi aberto em uma nova aba. Agora basta confirmar os detalhes por lá!',
-                    whatsappUrl,
-                    isError: false
-                });
-            } else {
-                openOrderModal({
                     title: 'WhatsApp aberto, mas houve um aviso',
                     message: 'O WhatsApp foi aberto, porém não foi possível registrar a prévia no sistema. Confira o console.',
                     whatsappUrl,
                     isError: true
+                });
+            } else {
+                openOrderModal({
+                    title: 'Pedido enviado para o WhatsApp!',
+                    message: 'A prévia do seu pedido foi salva como pendente e o WhatsApp foi aberto em uma nova aba. Agora basta confirmar os detalhes por lá!',
+                    whatsappUrl,
+                    isError: false
                 });
             }
         } catch (err) {
