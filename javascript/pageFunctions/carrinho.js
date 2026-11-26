@@ -162,7 +162,7 @@ async function getCartItems(cartId) {
 }
 
 function buildWhatsappUrl(cart) {
-    const phone = "5514988082038";
+    const phone = "5511939288314";
 
     let total = 0;
     let itemsText = "";

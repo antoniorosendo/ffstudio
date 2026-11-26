@@ -5,8 +5,7 @@ renderFooter({ isAdmin: false });
 
 lucide.createIcons();
 
-// const phone = "5511939288314";
-const phone = "5514988082038";
+const phone = "5511939288314";
 
 const message =
     "Olá! Gostaria de conhecer melhor os produtos e possibilidades de encomendas personalizadas.";
